@@ -1,0 +1,20 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kchrgn/node-file-manager.git"
+  },
+  "author": "kchrgn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kchrgn/node-file-manager/issues"
+  },
+  "homepage": "https://github.com/kchrgn/node-file-manager#readme"
+}

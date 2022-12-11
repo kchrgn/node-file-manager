@@ -15,6 +15,9 @@ export const dispatch = (data) => {
         case 'cd':
             nwd.cdHandler(args);
             break;
+        case 'ls':
+            nwd.lsHandler();
+            break;
         case '.exit':
             exitApp();
             break;

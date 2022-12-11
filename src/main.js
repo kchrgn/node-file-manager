@@ -1,17 +1,17 @@
 import { stdin, stdout } from 'process'
 import { exitApp } from './lib/exitApp.js'
-import { getUserName } from './lib/getUserName.js'
+import { dispatch } from './dispatch.js'
+import * as message from './lib/message.js'
+import { setCurrentWorkDirectory } from './nwd.js'
+import { homedir } from 'os'
 
 const fileManager = async () => {
-    const userName = getUserName();
-    console.log(`Welcome to the File Manager, ${userName}!`);
+    message.sayWelcome();
+    setCurrentWorkDirectory(homedir());
+    
+    stdin.on('data', data => { dispatch(data) });
 
-
-    stdin.on('data', data => {
-        if (data.toString().trim() === '.exit') exitApp(userName);
-    });
-
-    process.on('SIGINT', () => exitApp(userName));
+    process.on('SIGINT', () => exitApp());
 }
 
 await fileManager();

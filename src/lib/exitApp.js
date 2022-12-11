@@ -1,4 +1,7 @@
-export const exitApp = (name) => {
-	process.stdout.write(`Thank you for using File Manager, ${name}, goodbye!`);
+import { userName } from "./getUserName.js";
+import * as message from './message.js'
+
+export const exitApp = () => {
+	message.sayBye();
 	process.exit();
 }

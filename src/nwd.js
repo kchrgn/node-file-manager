@@ -1,7 +1,6 @@
 import * as path from 'path'
 import * as message from './lib/message.js'
 import { readdir } from 'fs/promises';
-import { dir } from 'console';
 
 export const setCurrentWorkDirectory = (dir) => {
     process.chdir(dir);
@@ -26,7 +25,7 @@ export const cdHandler = (args) => {
     message.sayCurrDir();
 }
 
-export const  lsHandler = async () => {
+export const lsHandler = async () => {
     try {
         const dirContent = await readdir(process.cwd(), { withFileTypes: true });
         let res = [];

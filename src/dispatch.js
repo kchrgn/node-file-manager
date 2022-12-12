@@ -1,4 +1,5 @@
 import * as nwd from './nwd.js'
+import * as  bowf from './bowf.js'
 import { exitApp } from './lib/exitApp.js'
 import { getArgs } from './lib/getArgs.js'
 import { getCommand } from './lib/getCommand.js'
@@ -17,6 +18,9 @@ export const dispatch = (data) => {
             break;
         case 'ls':
             nwd.lsHandler();
+            break;
+        case 'cat':
+            bowf.catHandler(args);
             break;
         case '.exit':
             exitApp();

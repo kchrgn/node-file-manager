@@ -29,10 +29,12 @@ export const cdHandler = (args) => {
 export const  lsHandler = async () => {
     try {
         const dirContent = await readdir(process.cwd(), { withFileTypes: true });
-        console.table(dirContent.map(item => {
-            return {Name: item.name, Type: (item.isDirectory() ? 'directory' : 'file')};
-            })
-        );
+        let res = [];
+        dirContent.forEach((item) => {
+            if (item.isDirectory()) res.push({Name: item.name, Type: 'directory'});
+            if (item.isFile()) res.push({Name: item.name, Type: 'file'});
+        });
+        console.table(res);
     } catch (err) {
         message.sayOperationFailed();
     }

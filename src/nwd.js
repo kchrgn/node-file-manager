@@ -3,7 +3,11 @@ import * as message from './lib/message.js'
 import { readdir } from 'fs/promises';
 
 export const setCurrentWorkDirectory = (dir) => {
-    process.chdir(dir);
+    try {
+        process.chdir(dir);
+    } catch (err) {
+        message.sayOperationFailed();
+    }
     message.sayCurrDir();
 }
 
@@ -17,6 +21,7 @@ export const upHandler = () => {
 }
 
 export const cdHandler = (args) => {
+    if (args.length != 1) throw new Error;
     try {
         process.chdir(args.join());
     } catch (err) {

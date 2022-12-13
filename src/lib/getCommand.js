@@ -1,3 +1,8 @@
 export const getCommand = (data) => {
-	return data.toString().trim().split(' ')[0];
+	const command = data.toString().trim().split(' ')[0];
+	if (command) {
+		return command;
+	} else {
+		throw new Error;
+	}	
 }

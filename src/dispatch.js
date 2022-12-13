@@ -5,30 +5,41 @@ import { getArgs } from './lib/getArgs.js'
 import { getCommand } from './lib/getCommand.js'
 import * as message from './lib/message.js'
 
-export const dispatch = (data) => {
-    const command = getCommand(data);
-    const args = getArgs(data);
-
-    switch (command) {
-        case 'up':
-            nwd.upHandler();
-            break;
-        case 'cd':
-            nwd.cdHandler(args);
-            break;
-        case 'ls':
-            nwd.lsHandler();
-            break;
-        case 'cat':
-            bowf.catHandler(args);
-            break;
-        case 'add':
-            bowf.addHandler(args);
-            break;
-        case '.exit':
-            exitApp();
-            break;
-        default:
-            message.sayInvalidInput();
+export const dispatch = async (data) => {
+    try {
+        const command = getCommand(data);
+        const args = getArgs(data);
+    
+        switch (command) {
+            case 'up':
+                nwd.upHandler();
+                break;
+            case 'cd':
+                nwd.cdHandler(args);
+                break;
+            case 'ls':
+                await nwd.lsHandler();
+                break;
+            case 'cat':
+                await bowf.catHandler(args);
+                break;
+            case 'add':
+                await bowf.addHandler(args);
+                break;
+            case 'rn':
+                await bowf.renameHandler(args);
+                break;
+            case '.exit':
+                exitApp();
+                break;
+            default:
+                throw new Error;
+        }
+            
+    } catch (err) {
+        message.sayInvalidInput();
+        message.sayCurrDir();   
     }
+    
+    
 }

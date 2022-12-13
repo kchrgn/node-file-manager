@@ -1,6 +1,7 @@
-import { open, rename } from 'fs/promises'
+import { open, rename, mkdir } from 'fs/promises'
 import * as message from './lib/message.js'
 import * as path from 'path'
+import { createReadStream } from 'fs'
 
 export const catHandler = async (args) => {
 	if (args.length != 1) {
@@ -45,6 +46,32 @@ export const renameHandler = async (args) => {
 		const newName = path.resolve(args[1]);
 		await rename(oldName, newName); 
 		message.sayCurrDir();
+	} catch (err) {
+		message.sayOperationFailed();
+		message.sayCurrDir();
+	}
+}
+
+export const copyHandler = async (args) => {
+	if (args.length != 2 ) {
+		throw new Error;
+	}
+
+	try {
+		const srcFile = path.resolve(args[0]);
+		const dstPath = path.resolve(args[1]);
+		const dstFile = path.resolve(dstPath, args[0]);
+
+		const readStream = createReadStream(srcFile);
+
+		await mkdir(dstPath, {recursive: true});
+
+		const fd = await open(dstFile, 'wx');
+		const writeStream = fd.createWriteStream(dstFile);
+
+		readStream.pipe(writeStream);
+		message.sayCurrDir();
+
 	} catch (err) {
 		message.sayOperationFailed();
 		message.sayCurrDir();

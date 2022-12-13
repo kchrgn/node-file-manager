@@ -29,6 +29,9 @@ export const dispatch = async (data) => {
             case 'rn':
                 await bowf.renameHandler(args);
                 break;
+            case 'cp':
+                await bowf.copyHandler(args);
+                break;
             case '.exit':
                 exitApp();
                 break;

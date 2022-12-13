@@ -22,6 +22,9 @@ export const dispatch = (data) => {
         case 'cat':
             bowf.catHandler(args);
             break;
+        case 'add':
+            bowf.addHandler(args);
+            break;
         case '.exit':
             exitApp();
             break;

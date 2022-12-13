@@ -1,15 +1,13 @@
-import { open, rename, mkdir } from 'fs/promises'
+import { open, rename, mkdir, rm } from 'fs/promises'
 import * as message from './lib/message.js'
 import * as path from 'path'
-import { createReadStream } from 'fs'
+import { pipeline } from 'stream/promises'
 
 export const catHandler = async (args) => {
-	if (args.length != 1) {
-		throw new Error;
-	}
+	if (args.length != 1) throw new Error;
 
 	try {
-		const pathToFile = path.resolve(args);
+		const pathToFile = path.resolve(args[0]);
 		const fd = await open(pathToFile);
 		const readFileStream = fd.createReadStream({encoding: 'utf8'});
 		readFileStream.on('data', (chunk) => { console.log(chunk)});
@@ -21,59 +19,62 @@ export const catHandler = async (args) => {
 }
 
 export const addHandler = async (args) => {
-	if (args.length != 1 ) {
-		throw new Error;
-	}
+	if (args.length != 1 ) throw new Error;
 
 	try {
-		const pathToFile = path.resolve(args);
+		const pathToFile = path.resolve(args[0]);
 		const fd = await open(pathToFile, 'wx');
 		await fd.close();
-		message.sayCurrDir();
 	} catch (err) {
 		message.sayOperationFailed();
-		message.sayCurrDir();
 	}
+	message.sayCurrDir();
 }
 
 export const renameHandler = async (args) => {
-	if (args.length != 2 ) {
-		throw new Error;
-	}
+	if (args.length != 2 ) throw new Error;
 
 	try {
 		const oldName = path.resolve(args[0]);
 		const newName = path.resolve(args[1]);
 		await rename(oldName, newName); 
-		message.sayCurrDir();
 	} catch (err) {
 		message.sayOperationFailed();
-		message.sayCurrDir();
 	}
+	message.sayCurrDir();
 }
 
-export const copyHandler = async (args) => {
-	if (args.length != 2 ) {
-		throw new Error;
-	}
+export const copyMoveHandler = async (args, { operation } = '') => {
+
+	if (args.length != 2 ) throw new Error;
+	
+	let fd_dst;
+	let fd_src;
 
 	try {
 		const srcFile = path.resolve(args[0]);
 		const dstPath = path.resolve(args[1]);
 		const dstFile = path.resolve(dstPath, args[0]);
 
-		const readStream = createReadStream(srcFile);
+		fd_src = await open(srcFile);
+		const readStream = fd_src.createReadStream();
 
 		await mkdir(dstPath, {recursive: true});
 
-		const fd = await open(dstFile, 'wx');
-		const writeStream = fd.createWriteStream(dstFile);
+		fd_dst = await open(dstFile, 'wx');
+		const writeStream = fd_dst.createWriteStream();
 
-		readStream.pipe(writeStream);
-		message.sayCurrDir();
+		await pipeline(readStream, writeStream);
 
+		if (operation === 'move') {
+			await fd_src.close();
+			await rm(srcFile);
+		};
 	} catch (err) {
 		message.sayOperationFailed();
-		message.sayCurrDir();
 	}
+	
+	await fd_src?.close();
+	await fd_dst?.close();
+	message.sayCurrDir();
 }

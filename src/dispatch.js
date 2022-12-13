@@ -30,7 +30,10 @@ export const dispatch = async (data) => {
                 await bowf.renameHandler(args);
                 break;
             case 'cp':
-                await bowf.copyHandler(args);
+                await bowf.copyMoveHandler(args);
+                break;
+            case 'mv':
+                await bowf.copyMoveHandler(args, {operation: 'move'});
                 break;
             case '.exit':
                 exitApp();

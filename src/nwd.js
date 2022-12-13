@@ -23,7 +23,7 @@ export const upHandler = () => {
 export const cdHandler = (args) => {
     if (args.length != 1) throw new Error;
     try {
-        process.chdir(args.join());
+        process.chdir(args[0]);
     } catch (err) {
         message.sayOperationFailed();
     }

@@ -54,7 +54,7 @@ export const copyMoveHandler = async (args, { operation } = '') => {
 	try {
 		const srcFile = path.resolve(args[0]);
 		const dstPath = path.resolve(args[1]);
-		const dstFile = path.resolve(dstPath, args[0]);
+		const dstFile = path.join(dstPath, path.basename(args[0]));
 
 		fd_src = await open(srcFile);
 		const readStream = fd_src.createReadStream();
@@ -76,5 +76,16 @@ export const copyMoveHandler = async (args, { operation } = '') => {
 	
 	await fd_src?.close();
 	await fd_dst?.close();
+	message.sayCurrDir();
+}
+
+export const deleteHandler = async (args) => {
+	if (args.length != 1) throw new Error;
+	const filePath = path.resolve(args[0]);
+	try {
+		await rm(filePath);
+	} catch (err) {
+		message.sayOperationFailed();
+	}
 	message.sayCurrDir();
 }

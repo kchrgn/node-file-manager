@@ -35,6 +35,9 @@ export const dispatch = async (data) => {
             case 'mv':
                 await bowf.copyMoveHandler(args, {operation: 'move'});
                 break;
+            case 'rm':
+                await bowf.deleteHandler(args);
+                break;
             case '.exit':
                 exitApp();
                 break;

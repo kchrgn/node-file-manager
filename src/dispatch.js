@@ -1,6 +1,7 @@
 import * as nwd from './nwd.js'
-import * as  bowf from './bowf.js'
+import * as bowf from './bowf.js'
 import * as osi from './osi.js'
+import * as hash from './hash.js'
 import { exitApp } from './lib/exitApp.js'
 import { getArgs } from './lib/getArgs.js'
 import { getCommand } from './lib/getCommand.js'
@@ -41,6 +42,9 @@ export const dispatch = async (data) => {
                 break;
             case 'os':
                 osi.osHandler(args);
+                break;
+            case 'hash':
+                await hash.hashHandler(args);
                 break;
             case '.exit':
                 exitApp();

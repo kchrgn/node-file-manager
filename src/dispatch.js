@@ -1,5 +1,6 @@
 import * as nwd from './nwd.js'
 import * as  bowf from './bowf.js'
+import * as osi from './osi.js'
 import { exitApp } from './lib/exitApp.js'
 import { getArgs } from './lib/getArgs.js'
 import { getCommand } from './lib/getCommand.js'
@@ -37,6 +38,9 @@ export const dispatch = async (data) => {
                 break;
             case 'rm':
                 await bowf.deleteHandler(args);
+                break;
+            case 'os':
+                osi.osHandler(args);
                 break;
             case '.exit':
                 exitApp();

@@ -49,10 +49,10 @@ export const dispatch = async (data) => {
                 await hash.hashHandler(args);
                 break;
             case 'compress':
-                archive.archiveHandler(args, {operation: 'compress'});
+                await archive.archiveHandler(args, {operation: 'compress'});
                 break;
             case 'decompress':
-                archive.archiveHandler(args, {operation: 'decompress'});
+                await archive.archiveHandler(args, {operation: 'decompress'});
                 break;
             case '.exit':
                 exitApp();

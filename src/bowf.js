@@ -12,6 +12,7 @@ export const catHandler = async (args) => {
 		const readFileStream = fd.createReadStream({encoding: 'utf8'});
 		readFileStream.on('data', (chunk) => { console.log(chunk)});
 		readFileStream.on('end', () => message.sayCurrDir());
+		readFileStream.on('error', () => message.sayOperationFailed());
 	} catch (err) {
 		message.sayOperationFailed();
 	}
@@ -57,8 +58,6 @@ export const copyMoveHandler = async (args, { operation } = '') => {
 		fd_src = await open(srcFile);
 		const readStream = fd_src.createReadStream();
 
-		await mkdir(dstPath, {recursive: true});
-
 		fd_dst = await open(dstFile, 'wx');
 		const writeStream = fd_dst.createWriteStream();
 
@@ -81,7 +80,7 @@ export const copyMoveHandler = async (args, { operation } = '') => {
 export const deleteHandler = async (args) => {
 	if (!args || args.length != 1) throw new Error;
 	const filePath = path.resolve(args[0]);
-	
+
 	try {
 		await rm(filePath);
 		message.sayCurrDir();

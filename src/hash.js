@@ -18,6 +18,7 @@ export const hashHandler = async (args) => {
 			fd.close();
 			message.sayCurrDir();
 		 });
+		 readStream.on('error', () => { message.sayOperationFailed });
 	} catch (err) {
 		message.sayOperationFailed();
 	}

@@ -2,9 +2,9 @@ import * as message from './lib/message.js'
 import * as path from 'path'
 import * as zlib from 'zlib'
 import { createReadStream, createWriteStream } from 'fs'
-import { pipeline } from 'stream'
+import { pipeline } from 'stream/promises'
 
-export const archiveHandler = (args, { operation }) => {
+export const archiveHandler = async (args, { operation }) => {
 	if (!args || args.length != 2) throw new Error;
 	try {
 		const srcFile = path.resolve(args[0]);
@@ -24,10 +24,8 @@ export const archiveHandler = (args, { operation }) => {
 
 		const writeStream = createWriteStream(dstFile);
 		
-		pipeline(readStream, brotliStream, writeStream, (err) => {
-			if (err) message.sayOperationFailed();
-			message.sayCurrDir();
-		});
+		await pipeline(readStream, brotliStream, writeStream);
+		message.sayCurrDir();
 		
 	} catch (err) {
 		message.sayOperationFailed();

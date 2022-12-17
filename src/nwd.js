@@ -5,32 +5,34 @@ import { readdir } from 'fs/promises';
 export const setCurrentWorkDirectory = (dir) => {
     try {
         process.chdir(dir);
+        message.sayCurrDir();
     } catch (err) {
         message.sayOperationFailed();
     }
-    message.sayCurrDir();
 }
 
-export const upHandler = () => {
+export const upHandler = (args) => {
+    if (args) throw new Error;
     try {
         process.chdir(path.resolve('..'));    
+        message.sayCurrDir();
     } catch (err) {
         message.sayOperationFailed();
     }
-    message.sayCurrDir();
 }
 
 export const cdHandler = (args) => {
-    if (args.length != 1) throw new Error;
+    if (!args || args.length != 1) throw new Error;
     try {
         process.chdir(args[0]);
+        message.sayCurrDir();
     } catch (err) {
         message.sayOperationFailed();
     }
-    message.sayCurrDir();
 }
 
-export const lsHandler = async () => {
+export const lsHandler = async (args) => {
+    if (args) throw new Error;
     try {
         const dirContent = await readdir(process.cwd(), { withFileTypes: true });
         let res = [];
@@ -38,9 +40,18 @@ export const lsHandler = async () => {
             if (item.isDirectory()) res.push({Name: item.name, Type: 'directory'});
             if (item.isFile()) res.push({Name: item.name, Type: 'file'});
         });
+        res.sort((a, b) => {
+            if (a.Type > b.Type) return 1;
+            if (a.Type < b.Type) return -1;
+            if (a.Type === b.Type) {
+                if (a.Name > b.Name) return 1;
+                if (a.Name < b.Name) return -1;
+                return 0;
+            }
+        })
         console.table(res);
+        message.sayCurrDir();
     } catch (err) {
         message.sayOperationFailed();
     }
-    message.sayCurrDir();
 }

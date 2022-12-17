@@ -1,4 +1,5 @@
 import { userName } from './getUserName.js'
+import * as os from 'os'
 
 export const sayWelcome = () => {
   console.log(`Welcome to the File Manager, ${userName}!`);
@@ -9,13 +10,16 @@ export const sayBye = () => {
 }
 
 export const sayCurrDir = () => {
-  console.log(`You are currently in ${process.cwd()}`);
+  console.log(`${os.EOL}You are currently in ${process.cwd()}`);
+  process.stdout.write('>');
 }
 
 export const sayInvalidInput = () => {
   console.log('Invalid input');
+  sayCurrDir();
 }
 
 export const sayOperationFailed = () => {
   console.log('Operation failed');
+  sayCurrDir();
 }

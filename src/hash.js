@@ -5,7 +5,7 @@ import * as path from 'path'
 import * as message from './lib/message.js'
 
 export const hashHandler = async (args) => {
-	if (args.length != 1) throw new Error;
+	if (!args || args.length != 1) throw new Error;
  	const hash = createHash('sha256');
 	const filePath = path.resolve(args[0]);
 
@@ -20,6 +20,5 @@ export const hashHandler = async (args) => {
 		 });
 	} catch (err) {
 		message.sayOperationFailed();
-		message.sayCurrDir();
 	}
 }

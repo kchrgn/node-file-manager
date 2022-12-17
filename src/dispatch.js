@@ -13,16 +13,16 @@ export const dispatch = async (data) => {
     try {
         const command = getCommand(data);
         const args = getArgs(data);
-    
+        
         switch (command) {
             case 'up':
-                nwd.upHandler();
+                nwd.upHandler(args);
                 break;
             case 'cd':
                 nwd.cdHandler(args);
                 break;
             case 'ls':
-                await nwd.lsHandler();
+                await nwd.lsHandler(args);
                 break;
             case 'cat':
                 await bowf.catHandler(args);
@@ -63,8 +63,6 @@ export const dispatch = async (data) => {
             
     } catch (err) {
         message.sayInvalidInput();
-        message.sayCurrDir();   
     }
     process.stdin.resume();
-    
 }

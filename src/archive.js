@@ -5,7 +5,7 @@ import { createReadStream, createWriteStream } from 'fs'
 import { pipeline } from 'stream'
 
 export const archiveHandler = (args, { operation }) => {
-	if (args.length != 2) throw new Error;
+	if (!args || args.length != 2) throw new Error;
 	try {
 		const srcFile = path.resolve(args[0]);
 		const dstPath = path.resolve(args[1]);
@@ -31,6 +31,5 @@ export const archiveHandler = (args, { operation }) => {
 		
 	} catch (err) {
 		message.sayOperationFailed();
-		message.sayCurrDir();
 	}
 }

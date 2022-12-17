@@ -4,7 +4,7 @@ import * as path from 'path'
 import { pipeline } from 'stream/promises'
 
 export const catHandler = async (args) => {
-	if (args.length != 1) throw new Error;
+	if (!args || args.length != 1) throw new Error;
 
 	try {
 		const pathToFile = path.resolve(args[0]);
@@ -14,39 +14,37 @@ export const catHandler = async (args) => {
 		readFileStream.on('end', () => message.sayCurrDir());
 	} catch (err) {
 		message.sayOperationFailed();
-		message.sayCurrDir();
 	}
 }
 
 export const addHandler = async (args) => {
-	if (args.length != 1 ) throw new Error;
+	if (!args || args.length != 1 ) throw new Error;
 
 	try {
 		const pathToFile = path.resolve(args[0]);
 		const fd = await open(pathToFile, 'wx');
 		await fd.close();
+		message.sayCurrDir();
 	} catch (err) {
 		message.sayOperationFailed();
 	}
-	message.sayCurrDir();
 }
 
 export const renameHandler = async (args) => {
-	if (args.length != 2 ) throw new Error;
+	if (!args || args.length != 2 ) throw new Error;
 
 	try {
 		const oldName = path.resolve(args[0]);
 		const newName = path.resolve(args[1]);
 		await rename(oldName, newName); 
+		message.sayCurrDir();
 	} catch (err) {
 		message.sayOperationFailed();
 	}
-	message.sayCurrDir();
 }
 
 export const copyMoveHandler = async (args, { operation } = '') => {
-
-	if (args.length != 2 ) throw new Error;
+	if (!args || args.length != 2 ) throw new Error;
 	
 	let fd_dst;
 	let fd_src;
@@ -70,22 +68,24 @@ export const copyMoveHandler = async (args, { operation } = '') => {
 			await fd_src.close();
 			await rm(srcFile);
 		};
+
+		message.sayCurrDir();
 	} catch (err) {
 		message.sayOperationFailed();
 	}
 	
 	await fd_src?.close();
 	await fd_dst?.close();
-	message.sayCurrDir();
 }
 
 export const deleteHandler = async (args) => {
-	if (args.length != 1) throw new Error;
+	if (!args || args.length != 1) throw new Error;
 	const filePath = path.resolve(args[0]);
+	
 	try {
 		await rm(filePath);
+		message.sayCurrDir();
 	} catch (err) {
 		message.sayOperationFailed();
 	}
-	message.sayCurrDir();
 }

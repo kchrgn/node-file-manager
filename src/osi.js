@@ -11,7 +11,7 @@ export const osHandler = (args) => {
 			case '--cpus':
 				console.log(`Overall amount of CPUs: ${os.cpus().length}`);
 				const cpus = os.cpus().map((item, index) => {
-					return {Model: item.model, Speed: `${item.speed} MHz`}
+					return {Model: item.model, Speed: `${(item.speed)/1000} GHz`}
 				})
 				console.table(cpus);
 				message.sayCurrDir();
